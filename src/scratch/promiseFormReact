@@ -1,0 +1,19 @@
+<div>
+      <div class="form-container">
+          {/* <!-- Form content goes here --> */}
+          <h1>Word Promise</h1>
+          <form onSubmit={handleSubmit}>
+              <label for="condition">condition:</label>
+              <input type="text" id="condition" name="condition" value={formData.condition} onChange={handleInputChange} required />
+              <label for="requesterName">requesterName:</label>
+              <input type="text" id="requesterName" name="requesterName" value={formData.requesterName} onChange={handleInputChange} required />
+              <label for="receiverName">receiverName</label>
+              <input type="text" id="receiverName" name="receiverName" value={formData.receiverName} onChange={handleInputChange} required />
+              <label>Selected Account: {account}</label>
+              <label for="pay">pay:</label>
+              <input type="checkbox" id="pay"  name="pay" value={formData.pay} onChange={handleInputChange} />
+              <input type="submit" value="Send it" />
+              <div> {result} </div>
+          </form>
+      </div>
+    </div>
