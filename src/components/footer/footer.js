@@ -11,14 +11,14 @@ function Footer() {
               <Link to="/" className="nav-link">Home</Link>
             </li>
             <li className="nav-item">
-              <Link to="/about" className="nav-link">About</Link>
+              <Link to="/about" className="nav-link">Github</Link>
             </li>
             <li className="nav-item">
-              <Link to="/contact" className="nav-link">Contact</Link>
+              <Link to="https://www.linkedin.com/in/omkar-pathak/" className="nav-link">Contact</Link>
             </li>
           </ul>
         </nav>
-        <p className="footer-text">&copy; 2023 My Website. All rights reserved.</p>
+        <p className="footer-text">&copy; 2023 PasteOnEth. All rights reserved.</p>
       </footer>
     );
   }

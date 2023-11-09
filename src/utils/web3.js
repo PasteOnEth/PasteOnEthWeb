@@ -1,8 +1,16 @@
 import Web3 from 'web3';
 import { MetaMaskSDK } from '@metamask/sdk';
 import {PasteImplAddress, PasteProxyByteCode, PasteProxyABI} from './config.js'
+// import detectEthereumProvider from '@metamask/detect-provider';
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+const options = {
+    checkInstallationOnAllCalls:true
+}
+const MMSDK = new MetaMaskSDK(options);
+const ethereum = MMSDK.getProvider();
+// You can also access via window.ethereum  
+// const ethereum = await detectEthereumProvider();
 
 
 export async function createPasteUsingMetamask(deployerAccount, paste) {
@@ -44,25 +52,16 @@ export async function createPasteUsingMetamask(deployerAccount, paste) {
 }
 
 export async function getRequesterAccount() {
-    // if (typeof window.ethereum !== 'undefined') {
-    //     // Metamask is installed
-    //     // const provider = await detectEthereumProvider();
-    //     console.log("Found provider");
-    //     // ...
-    //   } else {
-    //     // Metamask is not installed
-    //     console.log("Did not find provider");
-    //   }
-    
-    const options = [];
-    const MMSDK = new MetaMaskSDK(options);
-    const ethereum = MMSDK.getProvider(); // You can also access via window.ethereum  
     console.log("etherum", ethereum);
     return ethereum.request({ method: 'eth_requestAccounts', params: [] }).then((result) => {
         console.log("accounts", result);
         return result[0];
     }).catch((error) => {
-        console.log("Error during getRequestedAccount");
+        if (error.code === 4001) {
+            // EIP-1193 userRejectedRequest error
+            // If this happens, the user rejected the connection request.
+            console.log('Please connect to MetaMask.');
+        }
         throw error;
     });
 }

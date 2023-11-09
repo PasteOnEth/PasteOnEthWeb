@@ -1,11 +1,14 @@
 import './PasteForm.css';
 import React, {useState} from 'react';
 import {createPaste, createPasteUsingMetamask, getRequesterAccount} from '../../utils/web3.js';
+import {onChainNetworks, deployedOnChainNetwork} from '../../utils/config.js'
 import 'semantic-ui-css/semantic.min.css';
 import PasteSuccessMessage from '../PasteSuccessMessage/PasteSuccessMessage';
+import PasteErrorMessage from '../PasteErrorMessage/PasteErrorMessage';
 
 function PasteForm() {
   const [formData, setFormData] = useState({paste: ''});
+  const [pasteSent, setPasteSent] = useState(false);
   const [result, setResult] = useState(null); //TODO: Use after you get API response
   const [account, setAccount] = useState("");
   const [isValidAccount, setIsValidAccount] = useState(false);
@@ -25,7 +28,7 @@ function PasteForm() {
           setIsValidAccount(false);
         }
     }, (error) => {
-      console.log("errror in handle account", error);
+      console.log("Errror in handle account", error);
       setIsValidAccount(false);
     });
   };
@@ -38,47 +41,26 @@ function PasteForm() {
       const newProxyAddress = transactionObj.contractAddress;
       console.log("ADDRESS ", newProxyAddress);
       setResult(newProxyAddress);
+      setFormData({paste:''});
+      setPasteSent(true);
     })
-    .catch(error => 
-      console.log("Error while initializing contract ", error));
-
-
-    // createPasteUsingMetamask(account, formData.paste)
-    // .then(function(newContractInstance){
-    //   const newAddress = newContractInstance.options.address;
-    //   console.log(newAddress);
-    //   setResult(newAddress);
-    // }).catch(error => 
-    //   console.log("Error while initializing contract ", error));
-
-    // .on('error', function(error){ console.log(error) });
-
-    // createPaste(account, formData.paste)
-    // .on('transactionHash', function(hash){
-    //     console.log("found transaction hash", hash);
-    // })
-    // .on('receipt', function(receipt){
-    //     console.log("Found receipt", receipt);
-    //     const proxyAddress = receipt.contractAddress;
-    //     console.log("Contract address is ", proxyAddress);
-    //     return setResult(proxyAddress);
-    // })
-    // .on('error', function() {
-    //     console.error("Ran out of gas my god"); 
-    // });
-
-    setFormData({paste:''});
+    .catch(error => {
+      console.log("Error while initializing contract ", error);
+      setResult(null);
+      setPasteSent(true);
+    });
   };
   
   return (
     <div class="raised very padded text container segment form-container">
       <form class="ui form success" method="post" action="/submit" onSubmit={handleSubmit}>
-        {result && <PasteSuccessMessage pasteAddress={result} />}
+        {result && pasteSent && <PasteSuccessMessage pasteAddress={result} />}
+        {! result && pasteSent && <PasteErrorMessage />}
         <div class="required field">
           <label>Your immortal paste</label>
           <textarea name="paste" onChange={handleInputChange} value={formData.paste} required></textarea>
         </div>
-        <button class="button ui toggle small" onClick={handleAccount} type="button">Connect Ethereum account</button>
+        <button class="button ui toggle small" onClick={handleAccount} type="button">Connect {onChainNetworks[deployedOnChainNetwork]} account</button>
         {isValidAccount && <label>Current Account: {account} </label>}
         {isValidAccount && <button class="ui button primary" type="submit">Preview</button>}
       </form>
