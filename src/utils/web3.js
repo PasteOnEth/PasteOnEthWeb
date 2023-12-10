@@ -14,8 +14,6 @@ const ethereum = MMSDK.getProvider();
 
 
 export async function createPasteUsingMetamask(deployerAccount, paste) {
-    console.log("received", deployerAccount, paste);
-    
     // The encoded function call that the proxy uses to initialize the implementation contract
     const pasteData = web3.eth.abi.encodeFunctionCall({
         name: 'initialize',
@@ -52,9 +50,7 @@ export async function createPasteUsingMetamask(deployerAccount, paste) {
 }
 
 export async function getRequesterAccount() {
-    console.log("etherum", ethereum);
     return ethereum.request({ method: 'eth_requestAccounts', params: [] }).then((result) => {
-        console.log("accounts", result);
         return result[0];
     }).catch((error) => {
         if (error.code === 4001) {
@@ -68,8 +64,6 @@ export async function getRequesterAccount() {
 
 //Fallback function if there are issues with Metamask. This is NOT currently used 
 export function createPaste(deployerAccount, paste) {
-    console.log("received", deployerAccount, paste);
-
     const pasteData = web3.eth.abi.encodeFunctionCall({
         name: 'initialize',
         type: 'function',

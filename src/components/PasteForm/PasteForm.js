@@ -1,6 +1,6 @@
 import './PasteForm.css';
 import React, {useState} from 'react';
-import {createPaste, createPasteUsingMetamask, getRequesterAccount} from '../../utils/web3.js';
+import {createPasteUsingMetamask, getRequesterAccount} from '../../utils/web3.js';
 import {onChainNetworks, deployedOnChainNetwork} from '../../utils/config.js'
 import 'semantic-ui-css/semantic.min.css';
 import PasteSuccessMessage from '../PasteSuccessMessage/PasteSuccessMessage';
@@ -9,7 +9,7 @@ import PasteErrorMessage from '../PasteErrorMessage/PasteErrorMessage';
 function PasteForm() {
   const [formData, setFormData] = useState({paste: ''});
   const [pasteSent, setPasteSent] = useState(false);
-  const [result, setResult] = useState(null); //TODO: Use after you get API response
+  const [result, setResult] = useState(null); 
   const [account, setAccount] = useState("");
   const [isValidAccount, setIsValidAccount] = useState(false);
   
@@ -20,7 +20,6 @@ function PasteForm() {
 
   const handleAccount = (event) => {
     getRequesterAccount().then((account) => {
-        console.log("Got account ", account);
         if (account !== undefined) {
           setAccount(account);
           setIsValidAccount(true);
@@ -28,7 +27,6 @@ function PasteForm() {
           setIsValidAccount(false);
         }
     }, (error) => {
-      console.log("Errror in handle account", error);
       setIsValidAccount(false);
     });
   };
@@ -39,13 +37,11 @@ function PasteForm() {
     createPasteUsingMetamask(account, formData.paste)
     .then(transactionObj => {
       const newProxyAddress = transactionObj.contractAddress;
-      console.log("ADDRESS ", newProxyAddress);
       setResult(newProxyAddress);
       setFormData({paste:''});
       setPasteSent(true);
     })
     .catch(error => {
-      console.log("Error while initializing contract ", error);
       setResult(null);
       setPasteSent(true);
     });

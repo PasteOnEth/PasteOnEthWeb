@@ -1,6 +1,5 @@
 
 function PasteErrorMessage() {
-  
   return (
     <div class="ui negative message">
         <p>
