@@ -11,14 +11,17 @@ function Footer() {
               <Link to="/" className="nav-link">Home</Link>
             </li>
             <li className="nav-item">
-              <Link to="/about" className="nav-link">Github</Link>
+              <Link to="https://grass-stomach-d2d.notion.site/PasteOnEth-Design-Doc-a62835955492441c8f772c6f386b73fc" className="nav-link">Docs</Link>
+            </li>
+            <li className="nav-item">
+              <Link to="https://github.com/PasteOnEth" className="nav-link">Github</Link>
             </li>
             <li className="nav-item">
               <Link to="https://www.linkedin.com/in/omkar-pathak/" className="nav-link">Contact</Link>
             </li>
           </ul>
         </nav>
-        <p className="footer-text">&copy; 2023 PasteOnEth. All rights reserved.</p>
+        <p className="footer-text">&copy; 2024 PasteOnEth. All rights reserved.</p>
       </footer>
     );
   }
