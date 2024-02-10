@@ -5,7 +5,11 @@ import {PasteImplAddress, PasteProxyByteCode, PasteProxyABI} from './config.js'
 
 const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
 const options = {
-    checkInstallationOnAllCalls:true
+    checkInstallationOnAllCalls: true,
+    dappMetadata: {
+        name: "pasteOnEth",
+        url: "pasteOnEth.com",
+    },
 }
 const MMSDK = new MetaMaskSDK(options);
 const ethereum = MMSDK.getProvider();
@@ -13,7 +17,7 @@ const ethereum = MMSDK.getProvider();
 // const ethereum = await detectEthereumProvider();
 
 
-export async function createPasteUsingMetamask(deployerAccount, paste) {
+export async function createPasteTransactionUsingMetamask(deployerAccount, paste) {
     // The encoded function call that the proxy uses to initialize the implementation contract
     const pasteData = web3.eth.abi.encodeFunctionCall({
         name: 'initialize',
@@ -40,12 +44,10 @@ export async function createPasteUsingMetamask(deployerAccount, paste) {
         data: PasteProxyByteCode + proxyConstructorData.slice(2),
     }];
 
+    return await window.ethereum.request({method: "eth_sendTransaction", params: params});
+}
 
-    const proxyTransaction = await window.ethereum.request({method: "eth_sendTransaction", params: params})
-    .then(txHash => {return txHash;})
-    .catch(error => 
-      console.log("Error while initializing contract ", error));
-
+export async function getPasteAddressFromTransaction(proxyTransaction) {
     return window.ethereum.request({method: "eth_getTransactionReceipt", params: [proxyTransaction]});
 }
 
