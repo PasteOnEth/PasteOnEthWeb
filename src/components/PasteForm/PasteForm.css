@@ -4,6 +4,7 @@
     background-color: #fff;
     border-radius: 5px;
     align-items: center;
+    min-height: 80vh;
   }
   
   .dropdown-open {

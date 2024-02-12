@@ -5,12 +5,10 @@ import NotFound from './pages/NotFound/NotFound';
 
 function App() {
   return (
-      <div>
         <Routes>
           <Route path="/" exact element= {<Home/>} />
           <Route path="*" element={<NotFound/>} />
         </Routes>
-      </div>
   );
 }
 
