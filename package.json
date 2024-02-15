@@ -2,7 +2,7 @@
   "name": "word-promise-reactt",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://pasteoneth.github.io/PasteOnEthWeb/",
+  "homepage": "https://pasteoneth.com/",
   "dependencies": {
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/sdk": "^0.3.3",
@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d build --cname pasteoneth.com",
     "predeploy": "npm run build"
   },
   "eslintConfig": {
