@@ -43,12 +43,11 @@ export async function createPasteTransactionUsingMetamask(deployerAccount, paste
         from: deployerAccount,
         data: PasteProxyByteCode + proxyConstructorData.slice(2),
     }];
-
     return await window.ethereum.request({method: "eth_sendTransaction", params: params});
 }
 
 export async function getPasteAddressFromTransaction(proxyTransaction) {
-    return window.ethereum.request({method: "eth_getTransactionReceipt", params: [proxyTransaction]});
+    return await window.ethereum.request({method: "eth_getTransactionReceipt", params: [proxyTransaction]});
 }
 
 export async function getRequesterAccount() {

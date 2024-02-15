@@ -35,9 +35,8 @@ function PasteForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const txHash = createPasteTransactionUsingMetamask(account, formData.paste)
+    createPasteTransactionUsingMetamask(account, formData.paste)
     .then(txHash => {
-      console.log("Found transaction log to be: ", txHash);
       setResultTransaction(txHash);
       setFormData({paste:''});
       setPasteSent(true);
@@ -46,22 +45,23 @@ function PasteForm() {
     .catch(error => {
       setResultTransaction(null);
       setPasteSent(true);
-      console.log("Error while initializing contract ", error)
-    });
-
-    if (txHash !== null) {
-      getPasteAddressFromTransaction(txHash)
-      .then(transactionObj => {
-        const newProxyAddress = transactionObj.contractAddress;
-        setResultAddress(newProxyAddress);
-        setFormData({paste:''});
-        setPasteSent(true);
-      })
-      .catch(error => {
-        setResultAddress(null);
-        setPasteSent(true);
-      });
-    }
+      console.log("Error while initializing contract transaction", error);
+    })
+    .then(txHash => {
+      if (txHash !== null) {
+        getPasteAddressFromTransaction(txHash)
+        .then(transactionObj => {
+          const newProxyAddress = transactionObj.contractAddress;
+          setResultAddress(newProxyAddress);
+          setFormData({paste:''});
+          setPasteSent(true);
+        })
+        .catch(error => {
+          setResultAddress(null);
+          setPasteSent(true);
+          console.log("Error while fetching contract creation", error);
+        });
+    }});
   };
   
   return (
@@ -69,7 +69,7 @@ function PasteForm() {
       <form class="ui form success" method="post" action="/submit" onSubmit={handleSubmit}>
         {resultTransaction && pasteSent && <PasteSuccessMessage pasteTransactionId={resultTransaction} />}
         {resultAddress && pasteSent && <PasteSuccessMessage pasteAddress={resultAddress} />}
-        {! resultTransaction && !resultAddress && pasteSent && <PasteErrorMessage />}
+        {!resultTransaction && !resultAddress && pasteSent && <PasteErrorMessage />}
         <div class="required field">
           <label>Your immortal paste</label>
           <textarea name="paste" onChange={handleInputChange} value={formData.paste} required></textarea>
